@@ -1,0 +1,22 @@
+#!/bin/bash -l
+: The above line tells Linux to use the shell /bin/bash to execute
+: this script.  That must be the first line in the script.
+
+: You must have no lines beginning with # before these
+: PBS lines other than the /bin/bash line:
+#PBS -N 'arrayrunner'
+##PBS -o 'qsub.out'
+##PBS -e 'qsub.err'
+#PBS -q dev
+#PBS -l nodes=1:ppn=1,walltime=24:00:00
+
+: Change our current working directory to the directory from which you ran qsub:
+cd $PBS_O_WORKDIR
+
+: Tell matlab to run our arrayrunner.m file and then exit:
+module load matlab2011b
+matlab -nodisplay -r "arrayrunner, exit"
+
+: The -nodesktop line tells matlab not to try to use any graphics or JVM.
+: The -r specifies that the next argument "array runner, exit" is the
+: list of commands to run.
