@@ -72,7 +72,7 @@ for beta=1.001:0.02:1.201
 			U(i)=enercalc(1,movingthetarray(i)*pi/180,alpha(j)*pi/180,phiarray(i)*pi/180);
 		end
 		for i=1:length(phiarrayb)
-			Ub(i)=enercalc(1,movingthetarray(i)*pi/180,alpha(j)*pi/180,phiarrayb(i)*pi/180);
+			Ub(i)=enercalc(1,movingthetarrayb(i)*pi/180,alpha(j)*pi/180,phiarrayb(i)*pi/180);
 		end
 		for i=1:length(movingthetarray2)
 			U2(i)=enercalc(2,movingthetarray2(i)*pi/180,alpha(j)*pi/180,phiarray2(i)*pi/180);
