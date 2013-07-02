@@ -56,8 +56,16 @@ for beta=1.001:0.02:1.201
 		yendb=[];
 		yend2b=[];%sometmes don't get this assigned if no 2nd zero crossings are found
 		yend3b=[];
+        sqrtr=[]; %calculate force using this array of sqrt(R/EI) values
+        sqrtrb=[];
+        sqrtr2=[];
+        sqrtr2b=[];
+        sqrtr3=[];
+        sqrtr3b=[];
+
 		Yall=[];
 		Uall=[];
+        Rall=[];
 		
 		
 		for i=1:length(phiarray)
@@ -87,16 +95,27 @@ for beta=1.001:0.02:1.201
 		end
 		
 		%figure()
-		yend=plot1ipmov(alpha(j),movingthetarray,phiarray);
+		[yend,sqrtr]=plot1ipmov(alpha(j),movingthetarray,phiarray);
 		%hold on
-		yendb=plot1ipmov(alpha(j),movingthetarrayb,phiarrayb);
-		yend2=plot2ipmov(alpha(j),movingthetarray2,phiarray2);
-		yend2b=plot2ipmov(alpha(j),movingthetarray2b,phiarray2b);
-		yend3=plot1ipmov(alpha(j),movingthetarray3,phiarray3);
-		yend3b=plot1ipmov(alpha(j),movingthetarray3b,phiarray3b);
+		[yendb,sqrtrb]=plot1ipmov(alpha(j),movingthetarrayb,phiarrayb);
+		[yend2,sqrtr2]=plot2ipmov(alpha(j),movingthetarray2,phiarray2);
+		[yend2b,sqrtr2b]=plot2ipmov(alpha(j),movingthetarray2b,phiarray2b);
+		[yend3,sqrtr3]=plot1ipmov(alpha(j),movingthetarray3,phiarray3);
+		[yend3b,sqrtr3b]=plot1ipmov(alpha(j),movingthetarray3b,phiarray3b);
 		[Yall I]=sort([yend yendb yend2b yend2 yend3 yend3b]);
 		Uall=[U Ub U2b U2 U3 U3b];
 		Uall=Uall(I);%sort in same order as Yall
+        Rall=[sqrtr.^2,sqrtrb.^2,sqrtr2b.^2,sqrtr2.^2,sqrtr3.^2,sqrtr3b.^2];
+        Rall=Rall(I); %put in same order as Yall
+
+        %Do I need to normalize u by the calculated arclength? YES need mult by
+        %sqrt R to get units to work out properly.
+        Normu=Uall.*sqrt(Rall);
+
+        Phiall=[phiarray,phiarrayb,phiarray2b,phiarray2,phiarray3,phiarray3b];
+        Phiall=Phiall(I);
+        Vertforce=Rall.*sind(Phiall);%calculate vertical force
+
 		%figure()
 		%plot([fliplr(yend) yend2],[fliplr(U) U2])
 		%plot([fliplr(yend) fliplr(yendb) yend2b yend2 fliplr(yend3) yend3b],[fliplr(U) fliplr(Ub) U2b U2 fliplr(U3) U3b])
@@ -104,6 +123,10 @@ for beta=1.001:0.02:1.201
 		bigplot(j).alpha=alpha(j);
 		bigplot(j).yall=Yall;
 		bigplot(j).uall=Uall;
+        bigplot(j).rall=Rall;
+        bigplot(j).phiall=Phiall;
+        bigplot(j).normu=Normu;
+        bigplot(j).vertforce=Vertforce;
 	end  %end of parfor
 
 	hugeplot(k).data=bigplot;
@@ -113,5 +136,5 @@ end %end of beta loop
 
 
 elapsedtime=toc;
-save hugeout2.mat hugeplot elapsedtime;
+save giantout.mat hugeplot elapsedtime;
 matlabpool close;

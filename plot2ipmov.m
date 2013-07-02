@@ -1,4 +1,4 @@
-function yend = plot2ipmov(alpha,tprime,phi)
+function [yend,sqrtr] = plot2ipmov(alpha,tprime,phi)
 %Generate displacement for 2 inflection point solution
 % Alpha, tprime and phi are in degrees
 %Here phi is an array, alpha is the critical angle and tprime is the
@@ -10,6 +10,7 @@ function yend = plot2ipmov(alpha,tprime,phi)
     phi=phi*converto;
     %hold off
     yend=[];
+    sqrtr=[];
 for i=1:length(phi)
     xw=[0];
     yw=[0];
@@ -44,6 +45,7 @@ for i=1:length(phi)
     %plot(xw(length(theta1)),yw(length(theta1)),'ro')
     %plot(xw(length(theta1)+length(theta2)-1),yw(length(theta1)+length(theta2)-1),'mo')
     yend(i)=yw(end);%
+    sqrtr(i)=w;%save w so we can normalize with it later
 end;
 end
 

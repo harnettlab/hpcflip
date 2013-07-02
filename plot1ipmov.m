@@ -1,4 +1,4 @@
-function yend = plot1ipmov(alpha,tprime,phi)
+function [yend,sqrtr] = plot1ipmov(alpha,tprime,phi)
 %Generate x/w and y/w vectors for single inflection point solution
 % Alpha, tprime and phi are in degrees
 %Here phi is an array, alpha is the critical angle and tprime is the
@@ -9,6 +9,7 @@ function yend = plot1ipmov(alpha,tprime,phi)
     tprime=tprime*converto;
     phi=phi*converto;
     yend=[];
+sqrtr=[];
 for i=1:length(phi)
     xw=[0];
     yw=[0];
@@ -34,6 +35,7 @@ for i=1:length(phi)
     %hold on
     %plot(xw(length(theta1)),yw(length(theta1)),'ro')
     yend(i)=yw(end);
+    sqrtr(i)=w; %save w to normalize with later
 end;
 end
 
